@@ -1,0 +1,26 @@
+{
+    "loc1":{
+        "name": "Johns Hopkins University",
+        "AQ": 121,
+        "latitude": 39.3299013,
+        "longitude": -76.6230926
+    },
+    "loc2":{
+        "name": "The Maryland Zoo in Baltimore",
+        "AQ": 90,
+        "latitude": 39.3227144,
+        "longitude": -76.6523769
+    },
+    "loc3":{
+        "name": "Innor Harbor",
+        "AQ": 89,
+        "latitude": 39.2827349,
+        "longitude": -76.6178864
+    },
+    "loc4":{
+        "name": "The Johns Hopkins Hospital",
+        "AQ": 79,
+        "latitude": 39.2960676,
+        "longitude": -76.5946963
+    }
+}

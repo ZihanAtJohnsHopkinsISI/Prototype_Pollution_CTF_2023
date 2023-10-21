@@ -1,0 +1,57 @@
+--- app.js	2023-09-20 15:33:09.000000000 -0400
++++ app-patch.js	2023-10-18 10:47:00.000000000 -0400
+@@ -86,12 +86,52 @@
+     }
+ });
+ 
++
++function sanitizePayload(payload) {
++    const forbiddenKeys = ['__proto__', 'constructor', 'prototype'];
++
++    // Recursively checks object for forbidden keys
++    function hasForbiddenKeys(obj) {
++        for (let key in obj) {
++            if (obj.hasOwnProperty(key)) {
++                if (forbiddenKeys.includes(key)) {
++                    return true;
++                }
++                if (isObject(obj[key]) && hasForbiddenKeys(obj[key])) {
++                    return true;
++                }
++            }
++        }
++        return false;
++    }
++
++    if (hasForbiddenKeys(payload)) {
++        throw new Error("Invalid payload");
++    }
++
++    return payload;
++}
++
++function isObject(item) {
++    return (item && typeof item === 'object' && !Array.isArray(item) && item.constructor === Object);
++}
++
++
++
+ /**
+  * add new data points to the Map from the client side
+  */
+ app.post('/add', (req, res) => {
+-    deepMerge(AQMAP, req.body);
+-    res.send("Added!")
++
++    try {
++        const cleanPayload = sanitizePayload(req.body);
++        deepMerge(AQMAP, cleanPayload);
++        res.send('Added!')
++    } catch (error) {
++        // Handle error, send a relevant response
++        res.status(400).send('Invalid data provided.');
++    }
++    
+ })
+ 
+ /**

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baltimore Air Quality Map</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="static/styles/main.css" />
+</head>
+
+<body>
+
+    <div id="navbar">
+        <a href="#">Map</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <!-- README Section -->
+    <div id="readmeSection">
+        <h2>README</h2>
+        <p>
+            Have you ever read about Silent Spring?
+        </p>
+    </div>
+
+
+    <div id="content">
+        <div class="container">
+            <div class="input-container">
+                <h2>Add a New Location</h2>
+                <!-- Your input form -->
+                    <form id="locationForm" action="/add" method="POST">
+                        <label for="id">Location ID:</label>
+                        <input type="text" id="id" name="id" placeholder="loc5" required>
+                        
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="value[name]" placeholder="Towson" required>
+                        
+                        <label for="AQ">Air Quality (AQ):</label>
+                        <input type="number" id="AQ" name="value[AQ]" placeholder="100" required>
+                
+                        <label for="latitude">Latitude:</label>
+                        <input type="text" id="latitude" name="value[latitude]" placeholder="39.3963592" required>
+                
+                        <label for="longitude">Longitude:</label>
+                        <input type="text" id="longitude" name="value[longitude]" placeholder="-76.6357411" required>
+                
+                        <label for="userInputKey">Custom Key:</label>
+                        <input type="text" id="userInputKey" name="userInputKey" placeholder="date" required>
+                
+                        <label for="userInputValue">Custom Value:</label>
+                        <input type="text" id="userInputValue" name="userInputValue" placeholder= "Aug 16th" required>
+                
+                        <input type="submit" value="Add Location">
+                    </form>
+            </div>
+
+            <div id="sentData">
+                <h4>Data Sent:</h4>
+                <pre id="jsonData"></pre>
+            </div>
+        </div>
+
+        <div id="map-section">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="static/js/map.js"></script>
+    <!-- Your JavaScript -->
+    <script>
+        document.getElementById('locationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(event.target);
+            
+            const id = formData.get('id');
+            const customKey = formData.get('userInputKey');
+            const customValue = formData.get('userInputValue');
+
+            const data = {
+                [id]: {
+                    name: formData.get('value[name]'),
+                    AQ: formData.get('value[AQ]'),
+                    latitude: formData.get('value[latitude]'),
+                    longitude: formData.get('value[longitude]'),
+                    [customKey]: customValue
+                }
+            };
+
+            // Display the data
+            document.getElementById('jsonData').textContent = JSON.stringify(data, null, 2);
+
+
+            // Now send the data via AJAX (fetch API for example)
+            fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
